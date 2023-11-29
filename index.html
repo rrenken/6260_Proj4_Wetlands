@@ -6,6 +6,7 @@
   <title>Interactive Map with D3</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <script src="https://d3js.org/d3.v6.min.js"></script>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -25,8 +26,8 @@
 <script>
   const map = L.map('map-container').setView([0, 0], 2);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '@ OpenStreetMap contributors'
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&#169; Esri, &#169; OpenStreetMap contributors'
   }).addTo(map);
 
 
