@@ -3,55 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D3 Interactive Bar Chart Example</title>
+  <title>Interactive Map with D3</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <script src="https://d3js.org/d3.v6.min.js"></script>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
 
-<h1>BAR CHART EXAMPLE UPDATED</h1>
+<h1>Interactive Map using Leaflet TEST</h1>
 
-<div>
-  <label for="dataInput">Enter TEST TEST TEST data (comma-separated): </label>
-  <input type="text" id="dataInput" placeholder="e.g., 10,20,30,40,50">
-  <button onclick="updateChart()">Update Chart</button>
-</div>
+<div id="map-container" style="height: 500px;"></div>
 
-<div id="chart-container"></div>
 
 <script>
-  // Your D3 interactive bar chart code goes here
+  const map = L.map('map-conatiner').setView([0, 0], 2);
 
-  // Initial dataset
-  let data = [10, 20, 30, 40, 50];
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '@ OpenStreetMap contributors'
+  }).addTo(map);
 
-  // Create the initial chart
-  const svg = d3.select("#chart-container")
-    .append("svg")
-    .attr("width", 400)
-    .attr("height", 300);
 
-  updateChart(); // Call the update function to render the initial chart
 
-  // Function to update the chart based on user input
-  function updateChart() {
-    // Get user input and update the dataset
-    const inputData = document.getElementById("dataInput").value;
-    data = inputData.split(",").map(Number);
-
-    // Remove existing bars
-    svg.selectAll("rect").remove();
-
-    // Update the chart with new data
-    svg.selectAll("rect")
-      .data(data)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => i * 80)
-      .attr("y", d => 300 - d)
-      .attr("width", 75)
-      .attr("height", d => d)
-      .attr("fill", "blue");
-  }
 </script>
 
 </body>
