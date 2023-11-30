@@ -63,8 +63,15 @@
       if (!isNaN(lat) && !isNaN(long)) {
         const markerColor = colorScale(d3.mean(groupData.get(d.locName), d => +d.TN));
 
+        const debugInfo = groupData.get(d.locName)[0];
+
       L.marker([lat, long]).addTo(map)
-        .bindPopup(`<strong>${d.locName}</strong><br>Average TN: ${d3.mean(groupData.get(d.locName), d => +d.TN)}`);
+        // .bindPopup(`<strong>${d.locName}</strong><br>Average TN: ${d3.mean(groupData.get(d.locName), d => +d.TN)}`);
+        .bindPopup(`
+          <strong>${d.locName}</strong><br>
+          Average TN: ${d3.mean(groupData.get(d.locName), d => +d.TN)}<br>
+          Debug Info: ${JSON.stringify(debugInfo)}
+        `);
       }
     });
   });
