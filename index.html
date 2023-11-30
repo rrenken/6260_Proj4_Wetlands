@@ -13,6 +13,7 @@
   <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.umd.js"></script>
     <link href="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.css" rel="stylesheet" />
     <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v1.0.0/leaflet-maptilersdk.js"></script>
+
   <style>
     #map {
         /*position: absolute; top: 0; right: 0; bottom: 0; left: 0;} */
@@ -39,25 +40,53 @@
 
 
   // load Data
-  const waterCsv = 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands/main/water-samples.csv';
+  const waterCsv = 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/water-samples.csv';
   const soilCsv = 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands/main/soil-samples.csv';
 
 
   // Plot water samples
   d3.csv(waterCsv).then(data => {
 
-    console.log('Loaded Data: ', data);
+    const groupData = d3.group(data, d => d.locName);
+    const averages = Array.from(groupData, ([locName, group]) => ({
+      locName: locName,
+      averageLat: d3.mean(group, d => +d.y),
+      averageLong: d3.mean(group, d => +d.x),
+    }));
+
+    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0, 1]);
+
+    averages.forEach(d => {
+      const lat = d.averageLat;
+      const long = d.averageLong;
+
+      if (!isNaN(lat) && !isNaN(long)) {
+        const markerColor = colorScale(d3.mean(groupData.get(d.locName), d => +d.TN));
+
+      L.marker([lat, long]).addTo(map)
+        .bindPopup(`<strong>${d.locName}</strong><br>Average TN: ${d3.mean(groupData.get(d.locName), d => +d.TN)}`);
+      }
+    });
+  });
+
+/*
+    // console.log('Loaded Data: ', data);
 
     data.forEach(d => {
         const lat = parseFloat(d.y);
         const long = parseFloat(d.x);
+        const wetid = d.locName;
+
 
         if (!isNaN(lat) && !isNaN(long)) {
             L.marker([lat, long]).addTo(map).bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`);
         }
     });
-  });
+*/
 
+
+
+/*
   // Plot soil samples
   d3.csv(soilCsv).then(data => {
 
@@ -70,7 +99,7 @@ data.forEach(d => {
     if (!isNaN(lat) && !isNaN(long)) {
         L.marker([lat, long]).addTo(map).bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`);
     }
-    */
+    
 
 var iconOptions = {
     iconUrl: 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/orange-pin2.png',
@@ -94,7 +123,7 @@ marker.addTo(map);
 
 });
 });
-
+*/
 
 </script>
 
