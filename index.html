@@ -60,7 +60,7 @@
       const lat = d.averageLat;
       const long = d.averageLong;
 
-      if (!isNaN(lat) && !isNaN(long)) {
+      if (!isNaN(lat) && !isNaN(long) && lat > 0 && long < 0) {
         const markerColor = colorScale(d3.mean(groupData.get(d.locName), d => +d.TN));
 
         const debugInfo = groupData.get(d.locName)[0];
@@ -77,7 +77,7 @@
   });
 
 /*
-    // console.log('Loaded Data: ', data);
+    // plotting all water samples
 
     data.forEach(d => {
         const lat = parseFloat(d.y);
@@ -93,7 +93,7 @@
 
 
 
-/*
+
   // Plot soil samples
   d3.csv(soilCsv).then(data => {
 
@@ -102,7 +102,7 @@ console.log('Loaded Data: ', data);
 data.forEach(d => {
     const lat = parseFloat(d.y);
     const long = parseFloat(d.x);
-/*
+
     if (!isNaN(lat) && !isNaN(long)) {
         L.marker([lat, long]).addTo(map).bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`);
     }
@@ -130,7 +130,7 @@ marker.addTo(map);
 
 });
 });
-*/
+
 
 </script>
 
