@@ -38,6 +38,13 @@
         style: "hybrid",
   }).addTo(map);
 
+  var iconOptions = {
+    iconUrl: 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/orange-pin.png',
+    iconSize: [30, 35]
+}
+
+var customIcon = L.icon(iconOptions);
+
 
   // load Data
   const waterCsv = 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/water-samples.csv';
@@ -96,37 +103,26 @@
 
   // Plot soil samples
   d3.csv(soilCsv).then(data => {
+    data.forEach(d => {
+      const soilLat = parseFloat(d.y);
+      const soilLong = parseFloat(d.x);
 
-console.log('Loaded Data: ', data);
+    if (!isNaN(soilLat) && !isNaN(soilLong && soilLat > 0 && soilLong < 0)) {
 
-data.forEach(d => {
-    const lat = parseFloat(d.y);
-    const long = parseFloat(d.x);
+      const markerOptions = {
+        title: "Soil Samples",
+        clickable: true,
+        draggable: false,
+        icon: customIcon
+      };
 
-    if (!isNaN(lat) && !isNaN(long)) {
-        L.marker([lat, long]).addTo(map).bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`);
+      const marker =  L.marker([soilLat, soilLong], markerOptions);
+      
+      marker.bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`).openPopup;
+
+      marker.addTo(map);
     }
     
-
-var iconOptions = {
-    iconUrl: 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/orange-pin2.png',
-    iconSize: [30, 35]
-}
-
-var customIcon = L.icon(iconOptions);
-
-var markerOptions = {
-    title: "Soil Samples",
-    clickable: true,
-    draggable: false,
-    icon: customIcon
-}
-
-var marker = L.marker([lat, long], markerOptions);
-
-marker.bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`).openPopup();
-
-marker.addTo(map);
 
 });
 });
