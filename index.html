@@ -46,7 +46,14 @@
             padding: 10px;
             box-sizing: border-box;
             height: 520px;
+            overflow: hidden;
         }
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
         #div1, #div2 {
             border: 2px solid black;
             padding: 10px;
@@ -62,10 +69,10 @@
         }
         .contentDiv iframe {
             width: 100%;
-            height: 900px;
+            height: 100%;
             border: none;
         }
-        /* Flex container for div1 and div2 */
+        /* Flex container for div0 and div2 */
         .flex-container {
             display: flex;
         }
@@ -105,9 +112,9 @@
 
             // Update content for div0
             if (selectedValue === "soil") {
-                div0.innerHTML = '<iframe src="Map/map_soil.html" style="height: 600px;"></iframe>';
+                div0.innerHTML = '<iframe src="Map/map_soil.html" style="height: 520px;"></iframe>';
             } else if (selectedValue === "water") {
-                div0.innerHTML = '<iframe src="Map/map.html" style="height: 600px;"></iframe>';
+                div0.innerHTML = '<iframe src="Map/map.html" style="height: 520px;"></iframe>';
             }
 
             // Logic for Div1
@@ -119,9 +126,9 @@
 
             // Logic for Div2
             if (selectedValue === "soil") {
-                contentDiv2.innerHTML = '<iframe src="Scatterplotsoil/index.html"></iframe>';
+                contentDiv2.innerHTML = '<iframe src="Scatterplotsoil/index.html" style="width: 100%"></iframe>';
             } else if (selectedValue === "water") {
-                contentDiv2.innerHTML = '<iframe src="ScatterPlotWater/index1.html"></iframe>';
+                contentDiv2.innerHTML = '<iframe src="ScatterPlotWater/index1.html" style="width: 100%"></iframe>';
             }
         }
 
