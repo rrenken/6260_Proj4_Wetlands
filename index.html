@@ -8,6 +8,38 @@
             flex-direction: column; /* Stack divs vertically */
             margin: 0;
         }
+
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: lightgray;
+        }
+        #title {
+            margin-right: 100;
+            font-size: 24px;
+        }
+        #buttons {
+            display: flex;
+            gap: 50px;
+            margin-right: 200px;
+            width: 400px;
+        }
+        #buttons button {
+            width: 100%;
+            font-size: 42px;
+            transition: background-color 0.3s ease;
+        }
+        #buttons button.water{
+            background-color: lightblue;
+        }
+        #buttons button.soil {
+            background-color: orange;
+        }
+        #buttons button:hover {
+            background-color: whitesmoke;
+        }
         #div0 {
             width: 100%;
             border: 2px solid black;
@@ -38,9 +70,15 @@
 </head>
 <body>
     <div id="div_00">
-        <h1>Data Visualization Project</h1>
-        <button onclick="loadContent('water')" style="background-color: lightblue">Water</button>
-        <button onclick="loadContent('soil')" style="background-color: orange">Soil</button>
+        <div id="header">
+        <div id="title">
+            <h1>Wetlands Sampling - Chemical Analysis</h1>
+        </div>
+        <div id="buttons">
+                <button class="water" onclick="loadContent('water')">Water</button>
+                <button class="soil" onclick="loadContent('soil')" >Soil</button>
+        </div>
+        </div>
     </div>
     <div id="div0" class="contentDiv">
         <!-- Dynamic content will be loaded here -->
@@ -88,4 +126,6 @@
     </script>
 </body>
 </html>
+
+
 
