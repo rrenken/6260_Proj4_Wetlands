@@ -1,135 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
-<head> 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Map with D3</title>
+<html>
+<head>
+    <title>Your Home Page</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column; /* Stack divs vertically */
+            margin: 0;
+        }
+        #div0 {
+            width: 100%;
+            border: 2px solid black;
+            padding: 10px;
+            box-sizing: border-box;
+            height: 450px;
+        }
+        #div1, #div2 {
+            border: 2px solid black;
+            padding: 10px;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        .contentDiv iframe {
+            width: 100%;
+            height: 900px;
+            border: none;
+        }
+        /* Flex container for div1 and div2 */
+        .flex-container {
+            display: flex;
+        }
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <script src="https://d3js.org/d3.v6.min.js"></script>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.umd.js"></script>
-    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.css" rel="stylesheet" />
-    <script src="https://cdn.maptiler.com/leaflet-maptilersdk/v1.0.0/leaflet-maptilersdk.js"></script>
-
-  <style>
-    #map {
-        position: absolute; 
-        width: 750px;
-        height: 500px;
-        margin: auto;
-        */
-    }
-  </style>
+        #div_00 {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
+    <div id="div_00">
+        <h1>Data Visualization Project</h1>
+        <button onclick="loadContent('water')" style="background-color: lightblue">Water</button>
+        <button onclick="loadContent('soil')" style="background-color: orange">Soil</button>
+    </div>
+    <div id="div0" class="contentDiv">
+        <!-- Dynamic content will be loaded here -->
+    </div>
+    <div class="flex-container">
+        <div id="div1">
+            <div id="contentDiv" class="contentDiv"></div>
+        </div>
+        <div id="div2">
+            <div id="contentDiv2" class="contentDiv"></div>
+        </div>
+    </div>
 
-<h1>Interactive Map</h1>
+    <script>
+        function loadContent(selectedValue) {
+            var contentDiv1 = document.getElementById('contentDiv');
+            var contentDiv2 = document.getElementById('contentDiv2');
+            var div0 = document.getElementById('div0');
 
-<div id="map"></div>
+            // Update content for div0
+            if (selectedValue === "soil") {
+                div0.innerHTML = '<iframe src="Map/map_soil.html" style="height: 600px;"></iframe>';
+            } else if (selectedValue === "water") {
+                div0.innerHTML = '<iframe src="Map/map.html" style="height: 600px;"></iframe>';
+            }
 
+            // Logic for Div1
+            if (selectedValue === "soil") {
+                contentDiv1.innerHTML = '<iframe src="SoilScatteGraph/index1.html"></iframe>';
+            } else if (selectedValue === "water") {
+                contentDiv1.innerHTML = '<iframe src="WaterScatterGraph/index.html"></iframe>';
+            }
 
-<script>
-  const key = 'upVvexrI9F5KyNCNQg9I';
-      const map = L.map('map').setView([41.0234, -83.69], 15.5);
-      const mtLayer = L.maptilerLayer({
-        apiKey: key,
-        style: "hybrid",
-  }).addTo(map);
-
-  var iconOptions = {
-    iconUrl: 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/orange-pin.png',
-    iconSize: [30, 35]
-}
-
-var customIcon = L.icon(iconOptions);
-
-
-  // load Data
-  const waterCsv = 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/water-samples.csv';
-  const soilCsv = 'https://raw.githubusercontent.com/rrenken/6260_proj4_wetlands_Group3/main/soil-samples.csv';
-
-
-  // Plot water samples
-  d3.csv(waterCsv).then(data => {
-
-    const groupData = d3.group(data, d => d.locName);
-    const averages = Array.from(groupData, ([locName, group]) => ({
-      locName: locName,
-      averageLat: d3.mean(group, d => +d.y),
-      averageLong: d3.mean(group, d => +d.x),
-    }));
-
-    const colorScale = d3.scaleSequential(d3.interpolateBlues).domain([0, 1]);
-
-    averages.forEach(d => {
-      const lat = d.averageLat;
-      const long = d.averageLong;
-
-      if (!isNaN(lat) && !isNaN(long) && lat > 0 && long < 0) {
-        const markerColor = colorScale(d3.mean(groupData.get(d.locName), d => +d.TN));
-
-        const debugInfo = groupData.get(d.locName)[0];
-
-      L.marker([lat, long]).addTo(map)
-        // .bindPopup(`<strong>${d.locName}</strong><br>Average TN: ${d3.mean(groupData.get(d.locName), d => +d.TN)}`);
-        .bindPopup(`
-          <strong>${d.locName}</strong><br>
-          Average TN: ${d3.mean(groupData.get(d.locName), d => +d.TN)}<br>
-          Debug Info: ${JSON.stringify(debugInfo)}
-        `);
-      }
-    });
-  });
-
-/*
-    // plotting all water samples
-
-    data.forEach(d => {
-        const lat = parseFloat(d.y);
-        const long = parseFloat(d.x);
-        const wetid = d.locName;
-
-
-        if (!isNaN(lat) && !isNaN(long)) {
-            L.marker([lat, long]).addTo(map).bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`);
+            // Logic for Div2
+            if (selectedValue === "soil") {
+                contentDiv2.innerHTML = '<iframe src="Scatterplotsoil/index.html"></iframe>';
+            } else if (selectedValue === "water") {
+                contentDiv2.innerHTML = '<iframe src="ScatterPlotWater/index1.html"></iframe>';
+            }
         }
-    });
-*/
 
-
-
-
-  // Plot soil samples
-  d3.csv(soilCsv).then(data => {
-    data.forEach(d => {
-      const soilLat = parseFloat(d.y);
-      const soilLong = parseFloat(d.x);
-
-    if (!isNaN(soilLat) && !isNaN(soilLong && soilLat > 0 && soilLong < 0)) {
-
-      const markerOptions = {
-        title: "Soil Samples",
-        clickable: true,
-        draggable: false,
-        icon: customIcon
-      };
-
-      const marker =  L.marker([soilLat, soilLong], markerOptions);
-      
-      marker.bindPopup(`<strong>${d.TN}</strong><br>${d.TP}`).openPopup;
-
-      marker.addTo(map);
-    }
-    
-
-});
-});
-
-
-</script>
-
+        window.onload = function() {
+            loadContent('water'); // Initialize with water content by default
+        };
+    </script>
 </body>
 </html>
+
