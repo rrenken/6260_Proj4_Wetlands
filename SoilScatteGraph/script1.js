@@ -8,7 +8,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         return acc;
     }, []);
 
-    
+     
     const uniqueLocations = [...new Set(flattenedData.map(item => item.locName))];
 
     
@@ -26,9 +26,9 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         const parameterData2 = flattenedData.filter(d => d[parameter2] != null && d.locName === location);
 
         
-        const margin = {top: 10, right: 20, bottom: 50, left: 60},
+        const margin = {top: 10, right: 60, bottom: 40, left: 60},
               width = 1450 - margin.left - margin.right,
-              height = 500 - margin.top - margin.bottom;
+              height = 520 - margin.top - margin.bottom;
 
         
         const svg = d3.select("#my_dataviz")
@@ -49,9 +49,12 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
 
         
         svg.append("text")             
-           .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
+           .attr("transform", `translate(${width / 2}, ${height + margin.top + 25})`)
            .style("text-anchor", "middle")
-           .text("Date");
+           .text("Date")
+           .style("fill", "black")
+           .style("font-size", "24px")
+           .style("font-weight", "bold");
 
         
         const y = d3.scaleLinear()
@@ -74,11 +77,25 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         
         svg.append("text")
            .attr("transform", "rotate(-90)")
-           .attr("y", 0 - margin.left)
+           .attr("y", 0 - margin.left - 5)
            .attr("x",0 - (height / 2))
            .attr("dy", "1em")
            .style("text-anchor", "middle")
-           .text("Value");
+           .text(`${parameter}`)
+           .style("fill", "darkgreen")
+           .style("font-size", "24px")
+           .style("font-weight", "bold");
+
+        svg.append("text")
+           .attr("transform", "rotate(-90)")
+           .attr("y", width - margin.right + 95)
+           .attr("x",0 - (height / 2))
+           .attr("dy", "1em")
+           .style("text-anchor", "middle")
+           .text(`${parameter2}`)
+           .style("fill", "red")
+           .style("font-size", "24px")
+           .style("font-weight", "bold");
 
         
         const line1 = d3.line()
@@ -95,14 +112,14 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         svg.append("path")
            .datum(parameterData)
            .attr("fill", "none")
-           .attr("stroke", "red")
+           .attr("stroke", "darkgreen")
            .attr("stroke-width", 3)
            .attr("d", line1);
 
         svg.append("path")
            .datum(parameterData2)
            .attr("fill", "none")
-           .attr("stroke", "darkgreen") 
+           .attr("stroke", "red") 
            .attr("stroke-width", 3)
            .attr("d", line2);
 
@@ -149,7 +166,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
    .attr("cx", function(d) { return x(d.date); })
    .attr("cy", function(d) { return y(d[parameter]); })
    .attr("r", 7)
-   .attr("fill", "red")
+   .attr("fill", "darkgreen")
    .on("mouseover", function(event, d) {
        tooltip.transition()
               .duration(200)
@@ -205,12 +222,12 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
 
        
        svg.append("text")
-          .attr("class", "dataLabel")
+          .attr("class", "yaxislabel")
           .attr("x", x(d.date))
           .attr("y", y(d[parameter]) - 10) 
           .attr("text-anchor", "middle")
           .attr("fill", "black")
-          .text(d[parameter]);
+          .text(`${selectedParameter}`);
           */
    });
 
@@ -222,7 +239,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
        .attr("cx", d => x(d.date))
        .attr("cy", d => y2(d[parameter2]))
        .attr("r", 7)
-       .attr("fill", "darkgreen") 
+       .attr("fill", "red") 
        .on("mouseover", function(event, d) {
            tooltip.transition()
                   .duration(200)
