@@ -93,18 +93,18 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
            .attr("dy", "1em")
            .style("text-anchor", "middle")
            .text(`${parameter}`)
-           .style("fill", "#000080")
+           .style("fill", "#4A148C")
            .style("font-size", "24px")
            .style("font-weight", "bold");
 
-        svg.append("text")
+        svg.append("text") 
            .attr("transform", "rotate(-90)")
            .attr("y", width - margin.right + 95)
            .attr("x",0 - (height / 2))
            .attr("dy", "1em")
            .style("text-anchor", "middle")
            .text(`${parameter2}`)
-           .style("fill", "#800020")
+           .style("fill", "#00C853")
            .style("font-size", "24px")
            .style("font-weight", "bold");
 
@@ -123,15 +123,17 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         svg.append("path")
            .datum(parameterData)
            .attr("fill", "none")
-           .attr("stroke", "#000080")
-           .attr("stroke-width", 3)
+           .attr("stroke", "#4A148C")
+           .attr("stroke-width", 10)
+           .attr("stroke-opacity", 0.8)
            .attr("d", line1);
 
         svg.append("path")
            .datum(parameterData2)
            .attr("fill", "none")
-           .attr("stroke", "#800020") 
-           .attr("stroke-width", 3)
+           .attr("stroke", "#00C853") 
+           .attr("stroke-width", 10)
+           .attr("stroke-opacity", 0.8)
            .attr("d", line2);
 
         
@@ -176,8 +178,13 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
    .attr("class", "dot")
    .attr("cx", function(d) { return x(d.date); })
    .attr("cy", function(d) { return y(d[parameter]); })
-   .attr("r", 7)
-   .attr("fill", "#000080")
+   .attr("r", 10)
+   .attr("fill", "#4A148C")
+   .attr("stroke", "white")
+   .attr("stroke-width", 1)
+   .attr("stroke-opacity", 1)
+   .style("stroke-linejoin", "round")
+   .style("stroke-linecap", "round")
    .on("mouseover", function(event, d) {
        tooltip.transition()
               .duration(200)
@@ -249,8 +256,13 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
        .attr("class", "dot2")
        .attr("cx", d => x(d.date))
        .attr("cy", d => y2(d[parameter2]))
-       .attr("r", 7)
-       .attr("fill", "#800020") 
+       .attr("r", 10)
+        .attr("fill", "#00C853")
+        .attr("stroke", "white")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 1)
+        .style("stroke-linejoin", "round")
+        .style("stroke-linecap", "round")
        .on("mouseover", function(event, d) {
            tooltip.transition()
                   .duration(200)

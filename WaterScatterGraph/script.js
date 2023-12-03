@@ -93,7 +93,7 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
            .attr("dy", "1em")
            .style("text-anchor", "middle")
            .text(`${parameter}`)
-           .style("fill", "#000080")
+           .style("fill", "darkblue")
            .style("font-size", "24px")
            .style("font-weight", "bold");
 
@@ -104,7 +104,7 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
            .attr("dy", "1em")
            .style("text-anchor", "middle")
            .text(`${parameter2}`)
-           .style("fill", "#800020")
+           .style("fill", "red")
            .style("font-size", "24px")
            .style("font-weight", "bold");
 
@@ -123,15 +123,17 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
         svg.append("path")
            .datum(parameterData)
            .attr("fill", "none")
-           .attr("stroke", "#000080")
-           .attr("stroke-width", 3)
+           .attr("stroke", "darkblue")
+           .attr("stroke-width", 10)
+           .attr("stroke-opacity", 0.8)
            .attr("d", line1);
 
         svg.append("path")
            .datum(parameterData2)
            .attr("fill", "none")
-           .attr("stroke", "#800020") 
-           .attr("stroke-width", 3)
+           .attr("stroke", "red") 
+           .attr("stroke-width", 10)
+           .attr("stroke-opacity", 0.8)
            .attr("d", line2);
 
         
@@ -176,8 +178,13 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
    .attr("class", "dot")
    .attr("cx", function(d) { return x(d.date); })
    .attr("cy", function(d) { return y(d[parameter]); })
-   .attr("r", 7)
-   .attr("fill", "#000080")
+   .attr("r", 10)
+   .attr("fill", "darkblue")
+   .attr("stroke", "white")
+   .attr("stroke-width", 1)
+   .attr("stroke-opacity", 1)
+   .style("stroke-linejoin", "round")
+   .style("stroke-linecap", "round")
    .on("mouseover", function(event, d) {
        tooltip.transition()
               .duration(200)
@@ -251,8 +258,13 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
        .attr("class", "dot2")
        .attr("cx", d => x(d.date))
        .attr("cy", d => y2(d[parameter2]))
-       .attr("r", 7)
-       .attr("fill", "#800020")
+       .attr("r", 10)
+        .attr("fill", "red")
+        .attr("stroke", "white")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 1)
+        .style("stroke-linejoin", "round")
+        .style("stroke-linecap", "round")
        .on("mouseover", function(event, d) {
            tooltip.transition()
                   .duration(200)
