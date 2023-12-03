@@ -97,7 +97,7 @@ d3.json('modified_soil_data.json').then(function(data)
         .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .style("background-color", "orange")
+            .style("background-color", "rgb(255, 250, 240)")
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
@@ -155,7 +155,7 @@ d3.json('modified_soil_data.json').then(function(data)
         .attr("cx", d => x(d.date))
         .attr("cy", d => y(d.value))
         .attr("r", 5.5)
-        .style("fill", "darkblue")
+        .style("fill", "darkorange")
         
         
         .on("mouseover", function (event, d) {

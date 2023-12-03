@@ -35,7 +35,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
                       .append("svg")
                       .attr("width", width + margin.left + margin.right)
                       .attr("height", height + margin.top + margin.bottom)
-                      .style("background-color", "orange")
+                      .style("background-color", "rgb(255, 250, 240)")
                       .append("g")
                       .attr("transform", `translate(${margin.left},${margin.top})`);
 

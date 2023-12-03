@@ -99,7 +99,7 @@ d3.json('modified_water_data.json').then(function(data)
         .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .style("background-color", "lightblue")
+            .style("background-color", "rgb(230, 240, 240)")
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
