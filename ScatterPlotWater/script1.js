@@ -82,14 +82,14 @@ d3.json('modified_water_data.json').then(function(data)
      
 
 
-    let margin = {top: 25, right: 20, bottom: 30, left: 40},
-        width = 710 - margin.left - margin.right,
-        height = 380 - margin.top - margin.bottom;
+    let margin = {top: 50, right: 20, bottom: 25, left: 40},
+        width = 640 - margin.left - margin.right,
+        height = 370 - margin.top - margin.bottom;
 
     
     let x = d3.scaleTime().range([0, width]);
     let y = d3.scaleLinear().range([height, 0]);
-
+    
     
     let xAxis = d3.axisBottom(x).ticks(5);
     let yAxis = d3.axisLeft(y).ticks(5);
@@ -148,8 +148,11 @@ d3.json('modified_water_data.json').then(function(data)
 
     
     x.domain([startDate, endDate]);
-    y.domain([0, d3.max(filteredData, d => d.value)]);
+    y.domain([d3.min(filteredData, d => d.value), d3.max(filteredData, d => d.value)]);
 
+    svg.append("g")
+        .attr("class", "y-axis")
+        .call(yAxis);
     
     svg.selectAll(".dot")
         .data(filteredData)
@@ -157,8 +160,11 @@ d3.json('modified_water_data.json').then(function(data)
         .attr("class", "dot")
         .attr("cx", d => x(d.date))
         .attr("cy", d => y(d.value))
-        .attr("r", 5.5)
-        .style("fill", "darkblue") 
+        .attr("r", 7)
+        .style("fill", "white")
+        .style("stroke", "darkblue")
+        .style("opacity", "0.9")
+        .style("stroke-width", "2.5") 
 
         
         .on("mouseover", function (event, d) {
@@ -245,14 +251,17 @@ d3.json('modified_water_data.json').then(function(data)
                 */
         });
 
-    
+    svg.select(".y-axis")
+        .transition()
+        .duration(500)
+        .call(yAxis);
+        
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
     
-    svg.append("g")
-        .call(yAxis);
+    
 }
 
 const parameterSelect = d3.select("#parameter-select");

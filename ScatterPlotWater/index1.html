@@ -5,12 +5,12 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <style>
        select{width: 200px;
-    padding: 7px;
-    margin-bottom: 5px;
+    padding: 3px;
+    margin-bottom: 2px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 1px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
@@ -28,7 +28,7 @@ select:focus {
 
 /* Option styling */
 select option {
-    padding: 10px;
+    padding: 5px;
     background: #f9f9f9;
     border-bottom: 1px solid #eee;
 }
@@ -54,12 +54,23 @@ select {
     display: flex;           /* Enable Flexbox */
     align-items: center;     /* Align items vertically in the center */
     justify-content: space-between; /* Space out the child elements */
+    margin: 10px;
 }
 
-#range-selector, #range-buttons {
-    flex: 1;                 /* Allow each child to grow and take up equal space */
-    margin: 10px;            /* Optional: Adds some space around the divs */
+#range-selector {
+    display: flex;
+    flex: 0;
 }
+#range-selector div {
+    margin-right: 10px; /* Add margin between slider elements */
+    width: 160px;
+}
+
+#range-buttons {
+    margin-right: 5%;
+}
+    
+
     </style>
 </head>
 <body>
@@ -77,9 +88,8 @@ select {
 
     <div id="scatter-plot"></div>
 
-    
     <div id="range_container">
-        <div id="range-selector">
+    <div id="range-selector">
         <div>
             <label for="start-date-slider">Start Date:</label>
             <input type="range" id="start-date-slider">
@@ -99,7 +109,9 @@ select {
     <button id="btn-2y">2 Years</button>
     <button id="btn-all">All</button>
     </div>
+
 </div>
+
     
     
     

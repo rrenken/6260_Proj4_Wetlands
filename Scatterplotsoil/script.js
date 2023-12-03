@@ -80,9 +80,9 @@ d3.json('modified_soil_data.json').then(function(data)
     }
 
     
-    let margin = {top: 25, right: 20, bottom: 30, left: 40},
-        width = 710 - margin.left - margin.right,
-        height = 380 - margin.top - margin.bottom;
+    let margin = {top: 50, right: 20, bottom: 25, left: 40},
+        width = 640 - margin.left - margin.right,
+        height = 370 - margin.top - margin.bottom;
 
     
     let x = d3.scaleTime().range([0, width]);
@@ -105,22 +105,19 @@ d3.json('modified_soil_data.json').then(function(data)
     d3.select(".tooltip").remove();
 
     
-    const tooltip = d3.select("body").append("div") 
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("background-color", "white")
-        .style("border", "1px solid black")
-        .style("padding", "5px")
-        .style("opacity", 0);
+    
 
-        function getTooltipLeftPosition(mouseX) {
-            const tooltipWidth = parseFloat(tooltip.style("width"));
-            const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            const leftPosition = mouseX + tooltipWidth + 10 > windowWidth
-                ? windowWidth - tooltipWidth - 10  // Adjusted this line
-                : mouseX + 10;
-            return leftPosition;
+    function getTooltipLeftPosition(mouseX, tooltipWidth) {
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        let leftPosition = mouseX - tooltipWidth - 20; // Default to left side
+    
+        if (mouseX - tooltipWidth - 20 < 0) {
+            // Adjust to the right if it doesn't fit on the left
+            leftPosition = mouseX + 20;
         }
+    
+        return leftPosition;
+    }
         
         function getTooltipTopPosition(mouseY) {
             const tooltipHeight = parseFloat(tooltip.style("height"));
@@ -130,6 +127,14 @@ d3.json('modified_soil_data.json').then(function(data)
                 : mouseY + 10;
             return topPosition;
         }
+
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("background-color", "white")
+        .style("border", "1px solid black")
+        .style("padding", "5px")
+        .style("opacity", 0);
 
 
     function updateGraph() {
@@ -145,8 +150,11 @@ d3.json('modified_soil_data.json').then(function(data)
 
     
     x.domain([startDate, endDate]);
-    y.domain([0, d3.max(filteredData, d => d.value)]);
+    y.domain([d3.min(filteredData, d => d.value), d3.max(filteredData, d => d.value)]);
 
+    svg.append("g")
+        .attr("class", "y-axis")
+        .call(yAxis);
     
     svg.selectAll(".dot")
         .data(filteredData)
@@ -154,8 +162,11 @@ d3.json('modified_soil_data.json').then(function(data)
         .attr("class", "dot")
         .attr("cx", d => x(d.date))
         .attr("cy", d => y(d.value))
-        .attr("r", 5.5)
-        .style("fill", "darkorange")
+        .attr("r", 7)
+        .style("fill", "white")
+        .style("stroke", "rgb(185, 102, 1)")
+        .style("opacity", "0.9")
+        .style("stroke-width", "2.5")
         
         
         .on("mouseover", function (event, d) {
@@ -180,7 +191,7 @@ d3.json('modified_soil_data.json').then(function(data)
                 `samp_notes: ${d.samp_notes}`
                 */
                 )
-                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("left", getTooltipLeftPosition(event.pageX, parseFloat(tooltip.style("width"))) + "px")
                 .style("top", getTooltipTopPosition(event.pageY) + "px");
         })
         .on("mouseout", function (d) {
@@ -210,9 +221,9 @@ d3.json('modified_soil_data.json').then(function(data)
                 `samp_type: ${d.samp_type}<br/>` +
                 `notes: ${d.notes}<br/>` +
                 `samp_notes: ${d.samp_notes}`)
-                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("left", getTooltipLeftPosition(event.pageX, parseFloat(tooltip.style("width"))) + "px")
                 .style("top", getTooltipTopPosition(event.pageY) + "px");
-
+        });
             /*
             svg.selectAll(".verticalLine, .dataLabel").remove();
 
@@ -236,7 +247,7 @@ d3.json('modified_soil_data.json').then(function(data)
                 .attr("fill", "black")
                 .text(d.value);
                 */
-        });
+        
 
     
     svg.append("g")
@@ -244,7 +255,9 @@ d3.json('modified_soil_data.json').then(function(data)
         .call(xAxis);
 
     
-    svg.append("g")
+    svg.select(".y-axis")
+        .transition()
+        .duration(500)
         .call(yAxis);
 }
 
