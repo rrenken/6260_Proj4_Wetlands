@@ -17,10 +17,8 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
         locationSelect.append("option")
             .text(loc)
             .attr("value", loc)
-            .style("color", "black")
-            .style("font-size", "24px");
+            
 
-        locationSelect.style("font-size", "20px");
     });
 
     function createGraph(parameter, parameter2, location) {
@@ -28,14 +26,10 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
         
 
         parameterSelect = d3.select("#parameter-select");
-            parameterSelect.style("background-color", "darkgreen")
-            parameterSelect.style("color", "white")
-            parameterSelect.style("font-size", "20px");
+          
 
         parameter2Select = d3.select("#parameter2-select");
-            parameter2Select.style("background-color", "red")
-            parameter2Select.style("color", "white")
-            parameter2Select.style("font-size", "20px");
+            
         
         d3.select("#my_dataviz").html("");
 
@@ -99,7 +93,7 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
            .attr("dy", "1em")
            .style("text-anchor", "middle")
            .text(`${parameter}`)
-           .style("fill", "darkgreen")
+           .style("fill", "#000080")
            .style("font-size", "24px")
            .style("font-weight", "bold");
 
@@ -110,7 +104,7 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
            .attr("dy", "1em")
            .style("text-anchor", "middle")
            .text(`${parameter2}`)
-           .style("fill", "red")
+           .style("fill", "#800020")
            .style("font-size", "24px")
            .style("font-weight", "bold");
 
@@ -129,14 +123,14 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
         svg.append("path")
            .datum(parameterData)
            .attr("fill", "none")
-           .attr("stroke", "darkgreen")
+           .attr("stroke", "#000080")
            .attr("stroke-width", 3)
            .attr("d", line1);
 
         svg.append("path")
            .datum(parameterData2)
            .attr("fill", "none")
-           .attr("stroke", "red") 
+           .attr("stroke", "#800020") 
            .attr("stroke-width", 3)
            .attr("d", line2);
 
@@ -183,7 +177,7 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
    .attr("cx", function(d) { return x(d.date); })
    .attr("cy", function(d) { return y(d[parameter]); })
    .attr("r", 7)
-   .attr("fill", "darkgreen")
+   .attr("fill", "#000080")
    .on("mouseover", function(event, d) {
        tooltip.transition()
               .duration(200)
@@ -258,7 +252,7 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
        .attr("cx", d => x(d.date))
        .attr("cy", d => y2(d[parameter2]))
        .attr("r", 7)
-       .attr("fill", "red")
+       .attr("fill", "#800020")
        .on("mouseover", function(event, d) {
            tooltip.transition()
                   .duration(200)
