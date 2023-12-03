@@ -94,15 +94,15 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
         svg.append("path")
            .datum(parameterData)
            .attr("fill", "none")
-           .attr("stroke", "steelblue")
-           .attr("stroke-width", 1.5)
+           .attr("stroke", "red")
+           .attr("stroke-width", 3)
            .attr("d", line1);
 
         svg.append("path")
            .datum(parameterData2)
            .attr("fill", "none")
-           .attr("stroke", "green") 
-           .attr("stroke-width", 1.5)
+           .attr("stroke", "darkgreen") 
+           .attr("stroke-width", 3)
            .attr("d", line2);
 
         
@@ -146,7 +146,8 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
    .attr("class", "dot")
    .attr("cx", function(d) { return x(d.date); })
    .attr("cy", function(d) { return y(d[parameter]); })
-   .attr("r", 5)
+   .attr("r", 7)
+   .attr("fill", "red")
    .on("mouseover", function(event, d) {
        tooltip.transition()
               .duration(200)
@@ -220,8 +221,8 @@ d3.json('final_cleaned_water_data.json').then(function(data) {
        .attr("class", "dot2")
        .attr("cx", d => x(d.date))
        .attr("cy", d => y2(d[parameter2]))
-       .attr("r", 5)
-       .attr("fill", "green")
+       .attr("r", 7)
+       .attr("fill", "darkgreen")
        .on("mouseover", function(event, d) {
            tooltip.transition()
                   .duration(200)

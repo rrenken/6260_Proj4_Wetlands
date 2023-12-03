@@ -60,6 +60,17 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         svg.append("g")
            .call(d3.axisLeft(y));
 
+
+           //creating second scale for second y axis 
+        const y2 = d3.scaleLinear()
+        .domain([0, d3.max(flattenedData, function(d) { return d[parameter2]; })])
+                .range([height, 0]);
+
+    // Append the second y-axis to the right
+    svg.append("g")
+       .attr("transform", `translate(${width}, 0)`)
+       .call(d3.axisRight(y2));
+
         
         svg.append("text")
            .attr("transform", "rotate(-90)")
@@ -78,21 +89,21 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         const line2 = d3.line()
                        .defined(d => d[parameter2] != null) 
                        .x(function(d) { return x(d.date); })
-                       .y(function(d) { return y(d[parameter2]); });
+                       .y(function(d) { return y2(d[parameter2]); });
 
         
         svg.append("path")
            .datum(parameterData)
            .attr("fill", "none")
-           .attr("stroke", "steelblue")
-           .attr("stroke-width", 1.5)
+           .attr("stroke", "red")
+           .attr("stroke-width", 3)
            .attr("d", line1);
 
         svg.append("path")
            .datum(parameterData2)
            .attr("fill", "none")
-           .attr("stroke", "green") 
-           .attr("stroke-width", 1.5)
+           .attr("stroke", "darkgreen") 
+           .attr("stroke-width", 3)
            .attr("d", line2);
 
         
@@ -100,8 +111,35 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
 
     
     const tooltip = d3.select("body").append("div") 
-                     .attr("class", "tooltip")       
-                     .style("opacity", 0);
+               .attr("class", "tooltip")
+               .style("position", "absolute")
+               .style("background-color", "white")
+               .style("border", "1px solid black")
+               .style("padding", "5px")
+               .style("opacity", 0);
+       
+       
+               function getTooltipLeftPosition(mouseX) {
+                   const tooltipWidth = parseFloat(tooltip.style("width"));
+                   const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                   const leftPosition = mouseX + tooltipWidth + 10 > windowWidth
+                       ? windowWidth - tooltipWidth - 10  // Adjusted this line
+                       : mouseX + 10;
+                   return leftPosition;
+               }
+               
+               function getTooltipTopPosition(mouseY) {
+                   const tooltipHeight = parseFloat(tooltip.style("height"));
+                   const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+                   const topPosition = mouseY + tooltipHeight + 10 > windowHeight
+                       ? windowHeight - tooltipHeight - 10  // Adjusted this line
+                       : mouseY + 10;
+                   return topPosition;
+               }
+
+
+            selectedParameter = parameter;
+            selectedParameter2 = parameter2;
 
     
     svg.selectAll(".dot")
@@ -110,27 +148,18 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
    .attr("class", "dot")
    .attr("cx", function(d) { return x(d.date); })
    .attr("cy", function(d) { return y(d[parameter]); })
-   .attr("r", 5)
+   .attr("r", 7)
+   .attr("fill", "red")
    .on("mouseover", function(event, d) {
        tooltip.transition()
               .duration(200)
               .style("opacity", .9);
-       tooltip.html(`sampleMedia: ${d.sampleMedia}<br/>` +
-                `visitDate: ${d.visitDate}<br/>` +
-                `dateAnalTPTN: ${d.dateAnalTPTN}<br/>` +
-                `TN: ${d.TN}<br/>` +
-                `TP: ${d.TP}<br/>` +
-                `SPSC: ${d.SPSC}<br/>` +
-                `pH: ${d.pH}<br/>` +
-                `EC: ${d.EC}<br/>` +
-                `locName: ${d.locName}<br/>` +
-                `specific_location: ${d.specific_location}<br/>` +
-                `samp_type: ${d.samp_type}<br/>` +
-                `notes: ${d.notes}<br/>` +
-                `samp_notes: ${d.samp_notes}`)
-              .style("left", (event.pageX + 5) + "px")
-              .style("top", (event.pageY - 28) + "px");
-   })
+              tooltip.html(
+                `${selectedParameter}: ${d[selectedParameter]}<br/>`
+                )
+                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("top", getTooltipTopPosition(event.pageY) + "px");
+        })
        
        .on("mouseout", function(d) {
        tooltip.transition()
@@ -142,23 +171,25 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
        tooltip.transition()
               .duration(200)
               .style("opacity", .9);
-       tooltip.html(`sampleMedia: ${d.sampleMedia}<br/>` +
+       tooltip.html(
+                `${selectedParameter}: ${d[selectedParameter]}<br/>` +
+                //`sampleMedia: ${d.sampleMedia}<br/>` +
                 `visitDate: ${d.visitDate}<br/>` +
                 `dateAnalTPTN: ${d.dateAnalTPTN}<br/>` +
-                `TN: ${d.TN}<br/>` +
-                `TP: ${d.TP}<br/>` +
-                `SPSC: ${d.SPSC}<br/>` +
-                `pH: ${d.pH}<br/>` +
-                `EC: ${d.EC}<br/>` +
+                //`TN: ${d.TN}<br/>` +
+                //`TP: ${d.TP}<br/>` +
+                //`SPSC: ${d.SPSC}<br/>` +
+                //`pH: ${d.pH}<br/>` +
+                //`EC: ${d.EC}<br/>` +
                 `locName: ${d.locName}<br/>` +
                 `specific_location: ${d.specific_location}<br/>` +
-                `samp_type: ${d.samp_type}<br/>` +
+               // `samp_type: ${d.samp_type}<br/>` +
                 `notes: ${d.notes}<br/>` +
                 `samp_notes: ${d.samp_notes}`)
-              .style("left", (event.pageX + 5) + "px")
-              .style("top", (event.pageY - 28) + "px");
+                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("top", getTooltipTopPosition(event.pageY) + "px");
 
-       
+       /*
        svg.selectAll(".verticalLine, .dataLabel").remove();
 
        
@@ -180,6 +211,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
           .attr("text-anchor", "middle")
           .attr("fill", "black")
           .text(d[parameter]);
+          */
    });
 
    
@@ -188,38 +220,48 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
        .enter().append("circle")
        .attr("class", "dot2")
        .attr("cx", d => x(d.date))
-       .attr("cy", d => y(d[parameter2]))
-       .attr("r", 5)
-       .attr("fill", "green") 
+       .attr("cy", d => y2(d[parameter2]))
+       .attr("r", 7)
+       .attr("fill", "darkgreen") 
        .on("mouseover", function(event, d) {
            tooltip.transition()
                   .duration(200)
                   .style("opacity", .9);
-           tooltip.html(`sampleMedia: ${d.sampleMedia}<br/>` +
-                `visitDate: ${d.visitDate}<br/>` +
-                `dateAnalTPTN: ${d.dateAnalTPTN}<br/>` +
-                `TN: ${d.TN}<br/>` +
-                `TP: ${d.TP}<br/>` +
-                `SPSC: ${d.SPSC}<br/>` +
-                `pH: ${d.pH}<br/>` +
-                `EC: ${d.EC}<br/>` +
-                `locName: ${d.locName}<br/>` +
-                `specific_location: ${d.specific_location}<br/>` +
-                `samp_type: ${d.samp_type}<br/>` +
-                `notes: ${d.notes}<br/>` +
-                `samp_notes: ${d.samp_notes}`)
+                  tooltip.html(
+                    `${selectedParameter2}: ${d[selectedParameter2]}<br/>` 
+                   )
 
-              .style("left", (event.pageX + 5) + "px")
-              .style("top", (event.pageY - 28) + "px");
-       })
+                   .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                   .style("top", getTooltipTopPosition(event.pageY) + "px");
+          })
        .on("mouseout", function() {
            tooltip.transition()
                   .duration(500)
                   .style("opacity", 0);
        })
        .on("click", function(event, d) {
+        tooltip.transition()
+               .duration(200)
+               .style("opacity", .9);
+        tooltip.html(
+                `${selectedParameter2}: ${d[selectedParameter2]}<br/>` +
+                //`sampleMedia: ${d.sampleMedia}<br/>` +
+                `visitDate: ${d.visitDate}<br/>` +
+                `dateAnalTPTN: ${d.dateAnalTPTN}<br/>` +
+                //`TN: ${d.TN}<br/>` +
+                //`TP: ${d.TP}<br/>` +
+                //`SPSC: ${d.SPSC}<br/>` +
+                //`pH: ${d.pH}<br/>` +
+                //`EC: ${d.EC}<br/>` +
+                `locName: ${d.locName}<br/>` +
+                `specific_location: ${d.specific_location}<br/>` +
+               // `samp_type: ${d.samp_type}<br/>` +
+                `notes: ${d.notes}<br/>` +
+                `samp_notes: ${d.samp_notes}`)
+                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("top", getTooltipTopPosition(event.pageY) + "px");
 
-           
+           /*
            svg.selectAll(".verticalLine, .dataLabel").remove();
 
            
@@ -241,7 +283,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
               .attr("text-anchor", "middle")
               .attr("fill", "green")
               .text(d[parameter2]);
-
+*/
 
        });
     }
