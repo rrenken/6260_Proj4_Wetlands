@@ -14,10 +14,27 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
     
     const locationSelect = d3.select("#location-select");
     uniqueLocations.forEach(loc => {
-        locationSelect.append("option").text(loc).attr("value", loc);
+        locationSelect.append("option")
+            .text(loc)
+            .attr("value", loc)
+            .style("color", "black")
+            .style("font-size", "24px");
+
+        locationSelect.style("font-size", "20px");
     });
 
     function createGraph(parameter, parameter2, location) {
+
+
+        parameterSelect = d3.select("#parameter-select");
+            parameterSelect.style("background-color", "darkgreen")
+            parameterSelect.style("color", "white")
+            parameterSelect.style("font-size", "20px");
+
+        parameter2Select = d3.select("#parameter2-select");
+            parameter2Select.style("background-color", "red")
+            parameter2Select.style("color", "white")
+            parameter2Select.style("font-size", "20px");
         
         d3.select("#my_dataviz").html("");
 

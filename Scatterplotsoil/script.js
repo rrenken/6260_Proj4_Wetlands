@@ -248,8 +248,10 @@ d3.json('modified_soil_data.json').then(function(data)
         .call(yAxis);
 }
 
+const parameterSelect = d3.select("#parameter-select");
+parameterSelect.style("font-size", "14px");
 
-d3.select("#parameter-select").on("change", updateGraph);
+d3.select("#parameter-select").on("change", updateGraph)
 
 
 updateGraph();
