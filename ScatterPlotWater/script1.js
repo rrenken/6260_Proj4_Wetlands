@@ -79,10 +79,12 @@ d3.json('modified_water_data.json').then(function(data)
         d3.select("#end-date-slider").property("value", endDate.getTime());
     }
 
-    
-    let margin = {top: 30, right: 20, bottom: 30, left: 50},
-        width = 450 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+     
+
+
+    let margin = {top: 25, right: 20, bottom: 30, left: 40},
+        width = 710 - margin.left - margin.right,
+        height = 380 - margin.top - margin.bottom;
 
     
     let x = d3.scaleTime().range([0, width]);
@@ -106,8 +108,31 @@ d3.json('modified_water_data.json').then(function(data)
 
     
     const tooltip = d3.select("body").append("div") 
-                     .attr("class", "tooltip")       
-                     .style("opacity", 0);
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("background-color", "white")
+        .style("border", "1px solid black")
+        .style("padding", "5px")
+        .style("opacity", 0);
+
+
+        function getTooltipLeftPosition(mouseX) {
+            const tooltipWidth = parseFloat(tooltip.style("width"));
+            const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            const leftPosition = mouseX + tooltipWidth + 10 > windowWidth
+                ? windowWidth - tooltipWidth - 10  // Adjusted this line
+                : mouseX + 10;
+            return leftPosition;
+        }
+        
+        function getTooltipTopPosition(mouseY) {
+            const tooltipHeight = parseFloat(tooltip.style("height"));
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            const topPosition = mouseY + tooltipHeight + 10 > windowHeight
+                ? windowHeight - tooltipHeight - 10  // Adjusted this line
+                : mouseY + 10;
+            return topPosition;
+        }
 
     
     function updateGraph() {
@@ -134,58 +159,68 @@ d3.json('modified_water_data.json').then(function(data)
         .attr("cy", d => y(d.value))
         .attr("r", 5.5)
         .style("fill", "darkblue") 
+
+        
         .on("mouseover", function (event, d) {
             tooltip.transition()
                 .duration(200)
                 .style("opacity", .9);
-            tooltip.html(`sampleMedia: ${d.sampleMedia}<br/>` +
+            tooltip.html(
+                `${selectedParam}: ${d.value}<br/>`
+                /* +
+                //`sampleMedia: ${d.sampleMedia}<br/>` +
                 `visitDate: ${d.visitDate}<br/>` +
-                `TN: ${d.TN}<br/>` +
-                `TP: ${d.TP}<br/>` +
-                `disNH4: ${d.disNH4}<br/>` +
-                `disNO3: ${d.disNO3}<br/>` +
-                `disPO4: ${d.disPO4}<br/>` +
-                `TDN: ${d.TDN}<br/>` +
-                `TDP: ${d.TDP}<br/>` +
+               // `TN: ${d.TN}<br/>` +
+               // `TP: ${d.TP}<br/>` +
+               // `disNH4: ${d.disNH4}<br/>` +
+               // `disNO3: ${d.disNO3}<br/>` +
+               // `disPO4: ${d.disPO4}<br/>` +
+               // `TDN: ${d.TDN}<br/>` +
+               // `TDP: ${d.TDP}<br/>` +
                 `locName: ${d.locName}<br/>` +
                 `Pool Volume (cu ft): ${d['Pool Volume (cu ft)']}<br/>` +
                 `specific_location: ${d.specific_location}<br/>` +
-                `samp_type: ${d.samp_type}<br/>` +
+               // `samp_type: ${d.samp_type}<br/>` +
                 `notes: ${d.notes}<br/>` +
-                `samp_notes: ${d.samp_notes}`)
-                .style("left", (event.pageX + 5) + "px")
-                .style("top", (event.pageY - 28) + "px");
+                `samp_notes: ${d.samp_notes}` */
+                )
+                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("top", getTooltipTopPosition(event.pageY) + "px");
         })
         .on("mouseout", function (d) {
             tooltip.transition()
                 .duration(500)
                 .style("opacity", 0);
         })
+
+        
         .on("click", function (event, d) {
             
             tooltip.transition()
                 .duration(200)
-                .style("opacity", .9);
+                .style("opacity", 0.95);
             
-            tooltip.html(`sampleMedia: ${d.sampleMedia}<br/>` +
+            tooltip.html(
+                `${selectedParam}: ${d.value}<br/>` +
+                //`sampleMedia: ${d.sampleMedia}<br/>` +
                 `visitDate: ${d.visitDate}<br/>` +
-                `TN: ${d.TN}<br/>` +
-                `TP: ${d.TP}<br/>` +
-                `disNH4: ${d.disNH4}<br/>` +
-                `disNO3: ${d.disNO3}<br/>` +
-                `disPO4: ${d.disPO4}<br/>` +
-                `TDN: ${d.TDN}<br/>` +
-                `TDP: ${d.TDP}<br/>` +
+                //`TN: ${d.TN}<br/>` +
+                //`TP: ${d.TP}<br/>` +
+                //`disNH4: ${d.disNH4}<br/>` +
+                //`disNO3: ${d.disNO3}<br/>` +
+                //`disPO4: ${d.disPO4}<br/>` +
+                //`TDN: ${d.TDN}<br/>` +
+                //`TDP: ${d.TDP}<br/>` +
                 `locName: ${d.locName}<br/>` +
                 `Pool Volume (cu ft): ${d['Pool Volume (cu ft)']}<br/>` +
                 `specific_location: ${d.specific_location}<br/>` +
-                `samp_type: ${d.samp_type}<br/>` +
+                //`samp_type: ${d.samp_type}<br/>` +
                 `notes: ${d.notes}<br/>` +
                 `samp_notes: ${d.samp_notes}`)
-                .style("left", (event.pageX + 5) + "px")
-                .style("top", (event.pageY - 28) + "px");
+                .style("left", getTooltipLeftPosition(event.pageX) + "px")
+                .style("top", getTooltipTopPosition(event.pageY) + "px");
 
-            
+            /*
             svg.selectAll(".verticalLine, .dataLabel").remove();
 
             
@@ -207,6 +242,7 @@ d3.json('modified_water_data.json').then(function(data)
                 .attr("text-anchor", "middle")
                 .attr("fill", "black")
                 .text(d.value);
+                */
         });
 
     
@@ -221,6 +257,8 @@ d3.json('modified_water_data.json').then(function(data)
 
 
 d3.select("#parameter-select").on("change", updateGraph);
+
+
 
 
 updateGraph();

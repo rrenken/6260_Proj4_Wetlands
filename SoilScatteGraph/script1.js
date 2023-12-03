@@ -26,8 +26,8 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         const parameterData2 = flattenedData.filter(d => d[parameter2] != null && d.locName === location);
 
         
-        const margin = {top: 10, right: 20, bottom: 50, left: 60},
-              width = 960 - margin.left - margin.right,
+        const margin = {top: 10, right: 40, bottom: 50, left: 60},
+              width = 1450 - margin.left - margin.right,
               height = 500 - margin.top - margin.bottom;
 
         
@@ -60,6 +60,16 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         svg.append("g")
            .call(d3.axisLeft(y));
 
+        //creating second scale for second y axis 
+        const y2 = d3.scaleLinear()
+            .domain([0, d3.max(flattenedData, function(d) { return d[parameter2]; })])
+                    .range([height, 0]);
+
+        // Append the second y-axis to the right
+        svg.append("g")
+           .attr("transform", `translate(${width}, 0)`)
+           .call(d3.axisRight(y2));
+
         
         svg.append("text")
            .attr("transform", "rotate(-90)")
@@ -78,7 +88,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
         const line2 = d3.line()
                        .defined(d => d[parameter2] != null) 
                        .x(function(d) { return x(d.date); })
-                       .y(function(d) { return y(d[parameter2]); });
+                       .y(function(d) { return y2(d[parameter2]); });
 
         
         svg.append("path")
@@ -188,7 +198,7 @@ d3.json('final_cleaned_soil_data.json').then(function(data) {
        .enter().append("circle")
        .attr("class", "dot2")
        .attr("cx", d => x(d.date))
-       .attr("cy", d => y(d[parameter2]))
+       .attr("cy", d => y2(d[parameter2]))
        .attr("r", 5)
        .attr("fill", "green") 
        .on("mouseover", function(event, d) {
